@@ -1,4 +1,4 @@
-<!<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -30,10 +30,10 @@
             max-width: 900px;
             margin: 0 auto;
             padding: 40px 20px;
+            text-align: center;
         }
 
         h1 {
-            text-align: center;
             font-size: 3rem;
             margin-bottom: 40px;
             text-transform: uppercase;
@@ -52,17 +52,26 @@
             margin: 20px 0;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .photo-card:hover {
-            transform: translateY(-5px);
+            position: relative;
         }
 
         .photo-card img {
             max-width: 100%;
             border-radius: 10px;
             animation: slideUp 1s ease;
+        }
+
+        /* Invisible Button on Face */
+        .unlock-button {
+            position: absolute;
+            top: 18%;
+            left: 50%;
+            width: 25%;
+            height: 25%;
+            transform: translate(-50%, 0);
+            cursor: pointer;
+            background: rgba(255, 0, 0, 0.2);
+            border-radius: 50%;
         }
 
         .bad-side {
@@ -72,48 +81,6 @@
         .bad-side.unlocked {
             display: block;
             animation: reveal 1s ease;
-        }
-
-        .game-container {
-            text-align: center;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            margin: 20px 0;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        .game-button {
-            padding: 15px 40px;
-            background: linear-gradient(45deg, #ffd700, #ff6b6b);
-            border: none;
-            border-radius: 25px;
-            color: #fff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-        }
-
-        .game-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            margin-top: 20px;
-            overflow: hidden;
-        }
-
-        .progress {
-            height: 100%;
-            background: linear-gradient(45deg, #ffd700, #ff6b6b);
-            width: 0;
-            transition: width 0.3s ease;
         }
 
         @keyframes fadeIn {
@@ -137,25 +104,17 @@
     <div class="container">
         <h1>RosAina Jalang</h1>
 
-        <!-- Good Side Photo -->
+        <!-- Gallery Image -->
         <div class="photo-card good-side">
             <h2>Gallery</h2>
             <img src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2368.jpeg" alt="Good Side">
+            <div class="unlock-button" id="unlockButton"></div> <!-- Invisible clickable area -->
         </div>
 
-        <!-- Bad Side Photo -->
+        <!-- Bad Side Photo (Hidden) -->
         <div class="photo-card bad-side" id="badSide">
-            <h2>gambar Bogel </h2>
+            <h2>gambar Bogel</h2>
             <img src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2372.png" alt="Bad Side">
-        </div>
-
-        <!-- Game Container -->
-        <div class="game-container" id="gameContainer">
-            <h2>Unlock the Exclusive Gallery</h2>
-            <p>Click 5 times to reveal the secret photo!</p>
-            <button class="game-button" id="gameButton">Click to Play</button>
-                <div class="progress" id="progress"></div>
-            </div>
         </div>
     </div>
 
@@ -177,26 +136,13 @@
             }
         });
 
-        // Game Logic
-        const gameButton = document.getElementById('gameButton');
-        const progress = document.getElementById('progress');
-        const gameContainer = document.getElementById('gameContainer');
+        // Unlock Logic
+        const unlockButton = document.getElementById('unlockButton');
         const badSide = document.getElementById('badSide');
-        let clicks = 0;
-        const totalClicks = 5;
 
-        gameButton.addEventListener('click', () => {
-            clicks++;
-            const progressWidth = (clicks / totalClicks) * 100;
-            progress.style.width = `${progressWidth}%`;
-
-            if (clicks >= totalClicks) {
-                badSide.classList.add('unlocked');
-                gameContainer.style.display = 'none';
-                setTimeout(() => {
-                    alert('Access Granted! Enjoy the exclusive gallery.');
-                }, 500);
-            }
+        unlockButton.addEventListener('click', () => {
+            badSide.classList.add('unlocked');
+            alert('Access Granted! Enjoy the exclusive gallery.');
         });
     </script>
 </body>
