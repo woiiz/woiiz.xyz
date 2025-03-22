@@ -2,17 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Bonner Level MAX</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gersang Level</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            overflow: hidden;
             background: url('https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2368.jpeg') no-repeat center center fixed;
             background-size: cover;
             display: flex;
@@ -20,10 +13,8 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
-            touch-action: manipulation;
-            font-family: Arial, sans-serif;
+            touch-action: manipulation; /* Elakkan zoom in/out di mobile */
         }
-
         button {
             font-size: 40px;
             padding: 10px;
@@ -33,7 +24,6 @@
             color: white;
             border-radius: 10px;
         }
-
         #level {
             font-size: 20px;
             color: white;
@@ -42,101 +32,61 @@
             padding: 5px 10px;
             border-radius: 5px;
         }
-
         .eggplant {
             position: absolute;
             font-size: 30px;
-            animation: floatUp 1.5s linear infinite;
+            animation: floatUp 1s linear infinite;
         }
-
         @keyframes floatUp {
             0% { transform: translateY(0); opacity: 1; }
             100% { transform: translateY(-100vh); opacity: 0; }
         }
-
-        #videoContainer {
+        #specialVideo {
+            position: absolute;
+            width: 90%;
+            max-width: 600px;
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-        }
-
-        video {
-            width: 80%;
-            max-width: 800px;
-            border-radius: 10px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
         }
     </style>
 </head>
 <body>
 
-    <button onclick="increaseLevel()">💦</button>
     <div id="level">Level: 1</div>
-
-    <div id="videoContainer">
-        <video id="specialVideo" controls>
-            <source src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/9113436775545979285.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
+    <button id="increaseLevel">💦</button>
+    <video id="specialVideo" controls>
+        <source src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/9113436775545979285.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
     <script>
         let level = 1;
-        let timer;
+        const levelDisplay = document.getElementById("level");
+        const button = document.getElementById("increaseLevel");
+        const video = document.getElementById("specialVideo");
 
-        function increaseLevel() {
-            if (level < 100) {
-                level += 10;
-                if (level > 100) level = 100;
-                document.getElementById("level").innerText = "Level: " + level;
-                spawnEggplant();
-                resetTimer();
-            }
+        button.addEventListener("click", () => {
+            level += Math.floor(Math.random() * 10) + 5; // Level naik lebih cepat
+            levelDisplay.innerText = "Level: " + level;
 
-            if (level === 100) {
-                climax();
-            }
-        }
-
-        function spawnEggplant() {
             let eggplant = document.createElement("div");
-            eggplant.innerHTML = "🍆";
+            eggplant.innerText = "🍆";
             eggplant.classList.add("eggplant");
-
-            let x = Math.random() * window.innerWidth;
-            let y = window.innerHeight;
-
-            eggplant.style.left = `${x}px`;
-            eggplant.style.top = `${y}px`;
-
+            eggplant.style.left = Math.random() * 100 + "vw";
             document.body.appendChild(eggplant);
 
-            setTimeout(() => eggplant.remove(), 1500);
-        }
+            setTimeout(() => {
+                eggplant.remove();
+            }, 1000);
 
-        function climax() {
-            document.getElementById("videoContainer").style.display = "flex";
-            document.getElementById("specialVideo").play();
-        }
-
-        function resetTimer() {
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                if (level > 1) {
-                    level -= 5;
-                    if (level < 1) level = 1;
-                    document.getElementById("level").innerText = "Level: " + level;
-                    resetTimer();
-                }
-            }, 2000);
-        }
+            if (level >= 100) {
+                video.style.display = "block";
+                button.style.display = "none"; // Butang hilang selepas mencapai level 100
+            }
+        });
     </script>
 
 </body>
