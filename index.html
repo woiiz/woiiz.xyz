@@ -74,6 +74,29 @@
             border-radius: 50%;
         }
 
+        /* Invisible buttons on red circles */
+        .unlock-video {
+            position: absolute;
+            width: 20%;
+            height: 20%;
+            background: rgba(255, 0, 0, 0);
+            cursor: pointer;
+            border-radius: 50%;
+            transition: opacity 0.3s ease;
+        }
+
+        .circle1 {
+            top: 50%;
+            left: 28%;
+            transform: translate(-50%, -50%);
+        }
+
+        .circle2 {
+            top: 50%;
+            left: 65%;
+            transform: translate(-50%, -50%);
+        }
+
         .bad-side {
             display: none;
         }
@@ -81,6 +104,26 @@
         .bad-side.unlocked {
             display: block;
             animation: reveal 1s ease;
+        }
+
+        .hidden-video {
+            display: none;
+            margin-top: 20px;
+        }
+
+        /* Admin Button (🫧 Emoji) */
+        .admin-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        /* Admin Mode */
+        .admin-mode .unlock-video {
+            background: rgba(255, 0, 0, 0.2); /* 20% opacity */
         }
 
         @keyframes fadeIn {
@@ -104,6 +147,9 @@
     <div class="container">
         <h1>RosAina Jalang</h1>
 
+        <!-- Small Admin Button (🫧 Emoji) -->
+        <div class="admin-button" id="adminButton">🫧</div>
+
         <!-- Gallery Image -->
         <div class="photo-card good-side">
             <h2>Gallery</h2>
@@ -113,8 +159,21 @@
 
         <!-- Bad Side Photo (Hidden) -->
         <div class="photo-card bad-side" id="badSide">
-            <h2>gambar Bogel</h2>
+            <h2>Gambar Bogel</h2>
             <img src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2372.png" alt="Bad Side">
+            
+            <!-- Invisible clickable areas for red circles -->
+            <div class="unlock-video circle1" id="circle1"></div>
+            <div class="unlock-video circle2" id="circle2"></div>
+        </div>
+
+        <!-- Hidden Video -->
+        <div class="hidden-video" id="hiddenVideo">
+            <h2>Special Reward</h2>
+            <video controls width="100%">
+                <source src="https://github.com/woiiz/woiiz.xyz/blob/main/9113436775545979285.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
         </div>
     </div>
 
@@ -136,13 +195,39 @@
             }
         });
 
+        let isAdmin = false;
+
         // Unlock Logic
         const unlockButton = document.getElementById('unlockButton');
         const badSide = document.getElementById('badSide');
+        const circle1 = document.getElementById('circle1');
+        const circle2 = document.getElementById('circle2');
+        const hiddenVideo = document.getElementById('hiddenVideo');
+        const adminButton = document.getElementById('adminButton');
 
         unlockButton.addEventListener('click', () => {
             badSide.classList.add('unlocked');
             alert('Access Granted! Enjoy the exclusive gallery.');
+        });
+
+        function revealVideo() {
+            hiddenVideo.style.display = 'block';
+            alert('Special Reward Unlocked!');
+        }
+
+        circle1.addEventListener('click', revealVideo);
+        circle2.addEventListener('click', revealVideo);
+
+        // Admin Password Prompt
+        adminButton.addEventListener('click', () => {
+            let password = prompt("Enter Admin Password:");
+            if (password === "1234") {
+                isAdmin = true;
+                document.body.classList.add('admin-mode');
+                alert("ADMIN MODE ENABLED");
+            } else {
+                alert("Incorrect Password!");
+            }
         });
     </script>
 </body>
