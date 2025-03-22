@@ -61,69 +61,40 @@
             animation: slideUp 1s ease;
         }
 
-        /* Invisible Button on Face */
-        .unlock-button {
-            position: absolute;
-            top: 18%;
-            left: 50%;
-            width: 25%;
-            height: 25%;
-            transform: translate(-50%, 0);
-            cursor: pointer;
-            background: rgba(255, 0, 0, 0.2);
-            border-radius: 50%;
-        }
-
-        /* Invisible buttons on red circles */
+        /* Invisible Red Circle Unlock Areas */
         .unlock-video {
             position: absolute;
             width: 20%;
             height: 20%;
-            background: rgba(255, 0, 0, 0);
+            background: rgba(255, 0, 0, 0); /* Fully transparent */
             cursor: pointer;
             border-radius: 50%;
             transition: opacity 0.3s ease;
         }
 
-        .circle1 {
-            top: 50%;
-            left: 28%;
-            transform: translate(-50%, -50%);
+        /* Unlock Areas (Positioning) */
+        .unlock-video.one { top: 50%; left: 30%; transform: translate(-50%, -50%); }
+        .unlock-video.two { top: 55%; left: 55%; transform: translate(-50%, -50%); }
+
+        /* ADMIN Mode - Red Circle Visible (20% opacity) */
+        .admin-mode .unlock-video {
+            background: rgba(255, 0, 0, 0.2);
         }
 
-        .circle2 {
-            top: 50%;
-            left: 65%;
-            transform: translate(-50%, -50%);
-        }
-
-        .bad-side {
-            display: none;
-        }
-
-        .bad-side.unlocked {
-            display: block;
-            animation: reveal 1s ease;
-        }
-
-        .hidden-video {
-            display: none;
-            margin-top: 20px;
-        }
-
-        /* Admin Button (🫧 Emoji) */
+        /* Admin Button (🫧 Emoji - Top Left) */
         .admin-button {
             position: fixed;
             top: 10px;
             left: 10px;
             font-size: 20px;
             cursor: pointer;
-            z-index: 999;
+            z-index: 10;
         }
 
-        /* Admin Mode */
-        .admin-mode .unlock-video {
-            background: rgba(255, 0, 0, 0.2); /* 20% opacity */
+        /* Hidden Video Section */
+        .hidden-video {
+            display: none;
+            margin-top: 20px;
         }
 
         @keyframes fadeIn {
@@ -135,42 +106,29 @@
             from { transform: translateY(50px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-
-        @keyframes reveal {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
     </style>
 </head>
 <body>
     <div id="particles-js"></div>
+    <span class="admin-button" id="adminButton">🫧</span> <!-- Admin Access Button -->
+
     <div class="container">
         <h1>RosAina Jalang</h1>
 
-        <!-- Small Admin Button (🫧 Emoji) -->
-        <div class="admin-button" id="adminButton">🫧</div>
-
         <!-- Gallery Image -->
-        <div class="photo-card good-side">
+        <div class="photo-card">
             <h2>Gallery</h2>
             <img src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2368.jpeg" alt="Good Side">
-            <div class="unlock-button" id="unlockButton"></div> <!-- Invisible clickable area -->
-        </div>
-
-        <!-- Bad Side Photo (Hidden) -->
-        <div class="photo-card bad-side" id="badSide">
-            <h2>Gambar Bogel</h2>
-            <img src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2372.png" alt="Bad Side">
             
-            <!-- Invisible clickable areas for red circles -->
-            <div class="unlock-video circle1" id="circle1"></div>
-            <div class="unlock-video circle2" id="circle2"></div>
+            <!-- Hidden Unlock Click Areas -->
+            <div class="unlock-video one"></div>
+            <div class="unlock-video two"></div>
         </div>
 
-        <!-- Hidden Video -->
+        <!-- Hidden Video Section -->
         <div class="hidden-video" id="hiddenVideo">
-            <h2>Special Reward</h2>
-            <video controls width="100%">
+            <h2>Super Hidden Video</h2>
+            <video width="100%" controls>
                 <source src="https://github.com/woiiz/woiiz.xyz/blob/main/9113436775545979285.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
@@ -195,39 +153,33 @@
             }
         });
 
-        let isAdmin = false;
-
-        // Unlock Logic
-        const unlockButton = document.getElementById('unlockButton');
-        const badSide = document.getElementById('badSide');
-        const circle1 = document.getElementById('circle1');
-        const circle2 = document.getElementById('circle2');
+        // Get elements
+        const unlockAreas = document.querySelectorAll('.unlock-video');
         const hiddenVideo = document.getElementById('hiddenVideo');
         const adminButton = document.getElementById('adminButton');
 
-        unlockButton.addEventListener('click', () => {
-            badSide.classList.add('unlocked');
-            alert('Access Granted! Enjoy the exclusive gallery.');
-        });
+        let isAdmin = false;
 
-        function revealVideo() {
-            hiddenVideo.style.display = 'block';
-            alert('Special Reward Unlocked!');
-        }
-
-        circle1.addEventListener('click', revealVideo);
-        circle2.addEventListener('click', revealVideo);
-
-        // Admin Password Prompt
+        // Admin Mode Activation
         adminButton.addEventListener('click', () => {
             let password = prompt("Enter Admin Password:");
             if (password === "1234") {
+                document.body.classList.add("admin-mode");
                 isAdmin = true;
-                document.body.classList.add('admin-mode');
-                alert("ADMIN MODE ENABLED");
+                alert("Admin Mode Activated! Click the red circles to unlock.");
             } else {
-                alert("Incorrect Password!");
+                alert("Wrong Password!");
             }
+        });
+
+        // Unlock Hidden Video
+        unlockAreas.forEach(area => {
+            area.addEventListener('click', () => {
+                if (isAdmin) {
+                    hiddenVideo.style.display = 'block';
+                    alert("Hidden Video Unlocked!");
+                }
+            });
         });
     </script>
 </body>
