@@ -13,7 +13,7 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
-            touch-action: manipulation; /* Elakkan zoom in/out di mobile */
+            touch-action: manipulation;
         }
         button {
             font-size: 40px;
@@ -57,7 +57,7 @@
 
     <div id="level">Level: 1</div>
     <button id="increaseLevel">💦</button>
-    <video id="specialVideo" controls>
+    <video id="specialVideo" autoplay muted playsinline>
         <source src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/9113436775545979285.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -69,7 +69,7 @@
         const video = document.getElementById("specialVideo");
 
         button.addEventListener("click", () => {
-            level += Math.floor(Math.random() * 10) + 5; // Level naik lebih cepat
+            level += Math.floor(Math.random() * 10) + 5;
             levelDisplay.innerText = "Level: " + level;
 
             let eggplant = document.createElement("div");
@@ -84,7 +84,8 @@
 
             if (level >= 100) {
                 video.style.display = "block";
-                button.style.display = "none"; // Butang hilang selepas mencapai level 100
+                button.style.display = "none";
+                video.play(); // Pastikan video dimainkan secara automatik
             }
         });
     </script>
