@@ -1,95 +1,202 @@
-<!DOCTYPE html>
+<!<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhotoShare</title>
+    <title>Elite PhotoShare</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px;
         }
-        
-        .photo-container {
-            margin: 20px 0;
+
+        h1 {
             text-align: center;
+            font-size: 3rem;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeIn 2s ease;
         }
-        
-        .good-side img {
+
+        .photo-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .photo-card img {
             max-width: 100%;
             border-radius: 10px;
+            animation: slideUp 1s ease;
         }
-        
+
         .bad-side {
             display: none;
         }
-        
+
         .bad-side.unlocked {
             display: block;
+            animation: reveal 1s ease;
         }
-        
+
         .game-container {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
             margin: 20px 0;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
-        
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
+
+        .game-button {
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b);
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 1.2rem;
             cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
         }
-        
-        button:hover {
-            background-color: #0056b3;
+
+        .game-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b);
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes reveal {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
-    <h1>PhotoShare</h1>
-    
-    <!-- Good Side Photo (Public) -->
-    <div class="photo-container good-side">
-        <h2>Good Side Photo</h2>
-        <img src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2368.jpeg" alt="G Photo">
-    </div>
-    
-    <!-- Bad Side Photo (Locked) -->
-    <div class="photo-container bad-side" id="badSide">
-        <h2>Bad Side Photo</h2>
-        <img src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2372.png" alt="Bad Side Photo">
-    </div>
-    
-    <!-- Game Container -->
-    <div class="game-container" id="gameContainer">
-        <h2>Play to Unlock Bad Side Photo</h2>
-        <p>Click the button 5 times to win!</p>
-        <button id="gameButton">Click Me!</button>
-        <p>Clicks remaining: <span id="clickCount">5</span></p>
+    <div id="particles-js"></div>
+    <div class="container">
+        <h1>Elite PhotoShare</h1>
+
+        <!-- Good Side Photo -->
+        <div class="photo-card good-side">
+            <h2>Public Gallery</h2>
+            <img src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2368.jpeg" alt="Good Side">
+        </div>
+
+        <!-- Bad Side Photo -->
+        <div class="photo-card bad-side" id="badSide">
+            <h2>Exclusive Gallery</h2>
+            <img src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2372.png" alt="Bad Side">
+        </div>
+
+        <!-- Game Container -->
+        <div class="game-container" id="gameContainer">
+            <h2>Unlock the Exclusive Gallery</h2>
+            <p>Click 5 times to reveal the secret photo!</p>
+            <button class="game-button" id="gameButton">Click to Play</button>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
+        // Particle Background
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffd700" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                move: { enable: true, speed: 1, direction: "none", random: true }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "repulse" } }
+            }
+        });
+
+        // Game Logic
         const gameButton = document.getElementById('gameButton');
-        const clickCount = document.getElementById('clickCount');
+        const progress = document.getElementById('progress');
         const gameContainer = document.getElementById('gameContainer');
         const badSide = document.getElementById('badSide');
-        let clicksRemaining = 5;
+        let clicks = 0;
+        const totalClicks = 5;
 
         gameButton.addEventListener('click', () => {
-            clicksRemaining--;
-            clickCount.textContent = clicksRemaining;
+            clicks++;
+            const progressWidth = (clicks / totalClicks) * 100;
+            progress.style.width = `${progressWidth}%`;
 
-            if (clicksRemaining <= 0) {
-                // Unlock bad side photo
+            if (clicks >= totalClicks) {
                 badSide.classList.add('unlocked');
                 gameContainer.style.display = 'none';
-                alert('Congratulations! You unlocked the bad side photo!');
+                setTimeout(() => {
+                    alert('Access Granted! Enjoy the exclusive gallery.');
+                }, 500);
             }
         });
     </script>
