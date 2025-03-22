@@ -3,59 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tech Insights - Stay Updated</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Gersang Level</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: url('https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2368.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        button {
+            font-size: 24px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .eggplant {
+            position: absolute;
+            font-size: 30px;
+            animation: floatUp 3s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Tech Insights</h1>
-            <nav>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Articles</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
 
-    <section class="hero">
-        <div class="container">
-            <h2>Stay Ahead with the Latest in Tech</h2>
-            <p>Explore the latest trends in technology, cybersecurity, and innovation.</p>
-            <a href="#" class="btn">Read Articles</a>
-        </div>
-    </section>
+    <button onclick="spawnEggplant()">Gersang Level 💦</button>
 
-    <section class="articles">
-        <div class="container">
-            <h2>Latest Articles</h2>
-            <div class="article-grid">
-                <article>
-                    <h3>AI Revolution: What's Next?</h3>
-                    <p>Discover how AI is reshaping industries and our daily lives.</p>
-                    <a href="#">Read More</a>
-                </article>
-                <article>
-                    <h3>Cybersecurity in 2025</h3>
-                    <p>Learn about the latest cybersecurity threats and how to stay protected.</p>
-                    <a href="#">Read More</a>
-                </article>
-                <article>
-                    <h3>Top Programming Languages</h3>
-                    <p>Find out which programming languages are dominating the industry.</p>
-                    <a href="#">Read More</a>
-                </article>
-            </div>
-        </div>
-    </section>
+    <script>
+        function spawnEggplant() {
+            for (let i = 0; i < 5; i++) { // Spawn multiple emojis
+                let eggplant = document.createElement("div");
+                eggplant.innerHTML = "🍆";
+                eggplant.classList.add("eggplant");
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Tech Insights. All rights reserved.</p>
-        </div>
-    </footer>
+                // Randomize position
+                let x = Math.random() * window.innerWidth;
+                let y = window.innerHeight; // Start from bottom
+
+                eggplant.style.left = `${x}px`;
+                eggplant.style.top = `${y}px`;
+
+                document.body.appendChild(eggplant);
+
+                // Remove after animation ends
+                setTimeout(() => eggplant.remove(), 3000);
+            }
+        }
+    </script>
+
 </body>
 </html>
