@@ -1,162 +1,97 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RosAina Jalang</title>
+    <title>PhotoShare</title>
     <style>
         body {
-            background: none;
-            color: white;
             font-family: Arial, sans-serif;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-size: cover;
-            transition: background 1s ease-in-out;
-        }
-        #auth-container, #game-container, #special-video {
-            display: none;
-            background: rgba(0, 0, 0, 0.7);
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            border-radius: 10px;
-            max-width: 90%;
         }
-        button {
-            font-size: 18px;
-            padding: 10px;
-            margin: 10px;
-            border: none;
-            background: rgba(255, 255, 255, 0.3);
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background: rgba(255, 255, 255, 0.6);
-        }
-        input {
-            font-size: 18px;
-            padding: 10px;
-            margin: 10px;
-            border: none;
-            border-radius: 5px;
+        
+        .photo-container {
+            margin: 20px 0;
             text-align: center;
         }
-        #eggplant-container {
-            font-size: 30px;
-            margin-top: 10px;
+        
+        .good-side img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        
+        .bad-side {
+            display: none;
+        }
+        
+        .bad-side.unlocked {
+            display: block;
+        }
+        
+        .game-container {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-
-    <div id="auth-container">
-        <h2>Masukkan CODE untuk akses:</h2>
-        <input type="text" id="code-input" placeholder="code">
-        <button onclick="checkCode()">Submit</button>
-        <p id="error-message" style="color: red;"></p>
+    <h1>PhotoShare</h1>
+    
+    <!-- Good Side Photo (Public) -->
+    <div class="photo-container good-side">
+        <h2>Good Side Photo</h2>
+        <img src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2368.jpeg" alt="G Photo">
     </div>
-
-    <div id="game-container">
-        <div id="menu">
-            <h2>Selamat Datang ke Gersang Game Center</h2>
-            <p>Pilih permainan anda:</p>
-            <button onclick="startGame('dating')">💞 Dating Sim</button>
-            <button onclick="startGame('tap')">💦 Tap Tap Gersang Level</button>
-        </div>
-
-        <div id="dating-sim" style="display:none;">
-            <h2>Dating Sim Gersang</h2>
-            <p id="dialog">Anda bertemu seseorang yang sangat menggoda...</p>
-            <button onclick="chooseOption(1)">"besar jugak tetek awak."</button>
-            <button onclick="chooseOption(2)">"Saya rasa kita perlu cari tempat yang lebih sunyi?"</button>
-            <button onclick="chooseOption(3)">(Bisik ke telinganya) "Saya ada sesuatu yang boleh buat awak geli kelentit"</button>
-        </div>
-
-        <div id="tap-tap" style="display:none;">
-            <h2>Tap Tap Gersang Level</h2>
-            <p>Tekan emoji untuk meningkatkan level!</p>
-            <button onclick="increaseLevel()">💦</button>
-            <p>Level: <span id="level">0</span>/100</p>
-            <div id="eggplant-container"></div>
-        </div>
+    
+    <!-- Bad Side Photo (Locked) -->
+    <div class="photo-container bad-side" id="badSide">
+        <h2>Bad Side Photo</h2>
+        <img src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2372.png" alt="Bad Side Photo">
     </div>
-
-    <div id="special-video" style="display:none;">
-        <h3>Nikmati ganjaran anda... 💦</h3>
-        <video width="300" controls autoplay>
-            <source src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/9113436775545979285.mp4" type="video/mp4">
-            Video tidak dapat dimainkan.
-        </video>
+    
+    <!-- Game Container -->
+    <div class="game-container" id="gameContainer">
+        <h2>Play to Unlock Bad Side Photo</h2>
+        <p>Click the button 5 times to win!</p>
+        <button id="gameButton">Click Me!</button>
+        <p>Clicks remaining: <span id="clickCount">5</span></p>
     </div>
 
     <script>
-        let attempts = 0;
-        let level = 0;
+        const gameButton = document.getElementById('gameButton');
+        const clickCount = document.getElementById('clickCount');
+        const gameContainer = document.getElementById('gameContainer');
+        const badSide = document.getElementById('badSide');
+        let clicksRemaining = 5;
 
-        function checkCode() {
-            let input = document.getElementById("code-input").value;
-            let errorMessage = document.getElementById("error-message");
+        gameButton.addEventListener('click', () => {
+            clicksRemaining--;
+            clickCount.textContent = clicksRemaining;
 
-            if (input.toLowerCase() === "ainajalang") {
-                document.body.style.background = "url('https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/IMG_2368.jpeg') no-repeat center center fixed";
-                document.body.style.backgroundSize = "cover";
-                document.getElementById("auth-container").style.display = "none";
-                document.getElementById("game-container").style.display = "block";
-            } else {
-                attempts++;
-                errorMessage.innerText = "CODE salah! Percubaan: " + attempts + "/3";
-                if (attempts >= 3) {
-                    document.getElementById("auth-container").innerHTML = "<h2>Pergi balik la budak baik</h2>";
-                }
+            if (clicksRemaining <= 0) {
+                // Unlock bad side photo
+                badSide.classList.add('unlocked');
+                gameContainer.style.display = 'none';
+                alert('Congratulations! You unlocked the bad side photo!');
             }
-        }
-
-        function startGame(game) {
-            document.getElementById("menu").style.display = "none";
-            if (game === "dating") {
-                document.getElementById("dating-sim").style.display = "block";
-            } else if (game === "tap") {
-                document.getElementById("tap-tap").style.display = "block";
-            }
-        }
-
-        function chooseOption(option) {
-            let dialog = document.getElementById("dialog");
-            if (option === 1) {
-                dialog.innerText = "Dia tersenyum malu dan berkata, 'Saya suka cara awak cakap...'";
-            } else if (option === 2) {
-                dialog.innerText = "Dia menggigit bibir dan berbisik, 'Ke mana kita nak pergi?'";
-            } else if (option === 3) {
-                dialog.innerText = "Dia terkejut, tapi kemudian tersenyum nakal...";
-                setTimeout(showVideo, 2000);
-            }
-        }
-
-        function increaseLevel() {
-            if (level < 100) {
-                level += 10;
-                document.getElementById("level").innerText = level;
-                document.getElementById("eggplant-container").innerHTML += "🍆";
-            }
-            if (level >= 100) {
-                setTimeout(showVideo, 1000);
-            }
-        }
-
-        function showVideo() {
-            document.getElementById("game-container").innerHTML = "";
-            document.getElementById("special-video").style.display = "block";
-        }
-
-        window.onload = function() {
-            document.getElementById("auth-container").style.display = "block";
-        };
+        });
     </script>
-
 </body>
 </html>
