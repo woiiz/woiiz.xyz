@@ -1,1067 +1,1033 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WOIIZ</title>
-<script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script>tailwind.config={theme:{extend:{colors:{primary:'#FFD700',secondary:'#FFA500'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
-<style>
-body {
-background-color: #000;
-color: #fff;
-font-family: 'Inter', sans-serif;
-overflow-x: hidden;
-}
-.sidebar-icon {
-position: relative;
-transition: all 0.3s;
-}
-.sidebar-icon:hover {
-transform: scale(1.1);
-}
-.sidebar-icon::after {
-content: "";
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-border-radius: 50%;
-background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, rgba(255,165,0,0) 70%);
-opacity: 0;
-transition: opacity 0.3s;
-}
-.sidebar-icon:hover::after {
-opacity: 1;
-}
-.tooltip {
-position: absolute;
-left: 70px;
-background: rgba(20, 20, 20, 0.8);
-backdrop-filter: blur(5px);
-padding: 8px 12px;
-border-radius: 8px;
-white-space: nowrap;
-opacity: 0;
-transform: translateX(-20px);
-transition: all 0.3s;
-pointer-events: none;
-border: 1px solid rgba(255, 215, 0, 0.2);
-}
-.sidebar-icon:hover .tooltip {
-opacity: 1;
-transform: translateX(0);
-}
-.page-content {
-opacity: 0;
-transform: translateY(20px);
-transition: all 1s ease-out;
-}
-.loaded .page-content {
-opacity: 1;
-transform: translateY(0);
-}
-.profile-image {
-position: relative;
-overflow: hidden;
-}
-.profile-image::after {
-content: "";
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-border-radius: 50%;
-box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.3);
-pointer-events: none;
-}
-.stat-card {
-position: relative;
-overflow: hidden;
-transition: all 0.3s;
-}
-.stat-card:hover {
-transform: translateY(-5px);
-}
-.stat-card::before {
-content: "";
-position: absolute;
-top: -50%;
-left: -50%;
-width: 200%;
-height: 200%;
-background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, rgba(0,0,0,0) 70%);
-opacity: 0;
-transition: opacity 0.5s;
-transform: rotate(30deg);
-}
-.stat-card:hover::before {
-opacity: 1;
-}
-.download-btn {
-position: relative;
-overflow: hidden;
-transition: all 0.3s;
-}
-.download-btn::after {
-content: "";
-position: absolute;
-top: -50%;
-left: -50%;
-width: 200%;
-height: 200%;
-background: linear-gradient(90deg, rgba(255,215,0,0), rgba(255,215,0,0.2), rgba(255,215,0,0));
-transform: rotate(30deg);
-transition: all 0.8s;
-opacity: 0;
-}
-.download-btn:hover::after {
-opacity: 1;
-transform: rotate(30deg) translateX(100%);
-}
-.cursor-follower {
-position: fixed;
-width: 20px;
-height: 20px;
-border-radius: 50%;
-background: rgba(255, 215, 0, 0.3);
-pointer-events: none;
-transform: translate(-50%, -50%);
-z-index: 9999;
-mix-blend-mode: difference;
-transition: width 0.3s, height 0.3s, background 0.3s;
-}
-.cursor-dot {
-position: fixed;
-width: 5px;
-height: 5px;
-border-radius: 50%;
-background: #FFD700;
-pointer-events: none;
-transform: translate(-50%, -50%);
-z-index: 10000;
-transition: transform 0.1s;
-}
-.tab-button {
-position: relative;
-overflow: hidden;
-}
-.tab-button::after {
-content: "";
-position: absolute;
-bottom: 0;
-left: 0;
-width: 0%;
-height: 2px;
-background: linear-gradient(90deg, #FFD700, #FFA500);
-transition: width 0.3s;
-}
-.tab-button.active::after,
-.tab-button:hover::after {
-width: 100%;
-}
-.divider {
-position: relative;
-height: 1px;
-width: 100%;
-background: linear-gradient(90deg, rgba(255,215,0,0), rgba(255,215,0,0.5), rgba(255,215,0,0));
-}
-.divider::before {
-content: "";
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-width: 30px;
-height: 30px;
-background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD700'%3E%3Cpath d='M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z'/%3E%3C/svg%3E") center/contain no-repeat;
-opacity: 0.2;
-}
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(20px); }
-to { opacity: 1; transform: translateY(0); }
-}
-.fade-in {
-animation: fadeIn 0.8s forwards;
-}
-.loading-screen {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: #000;
-display: flex;
-justify-content: center;
-align-items: center;
-z-index: 9999;
-transition: opacity 1s;
-}
-.loading-screen.hidden {
-opacity: 0;
-pointer-events: none;
-}
-.loader {
-width: 80px;
-height: 80px;
-position: relative;
-}
-.loader:before, .loader:after {
-content: "";
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-border-radius: 50%;
-border: 3px solid transparent;
-border-top-color: #232e8d;
-}
-.loader:before {
-animation: spin 1.5s linear infinite;
-}
-.loader:after {
-border-top-color: #FFA500;
-animation: spin 1s linear infinite reverse;
-}
-@keyframes spin {
-0% { transform: rotate(0deg); }
-100% { transform: rotate(360deg); }
-}
-.magnetic-button {
-transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-.particle {
-position: absolute;
-background: #FFD700;
-border-radius: 50%;
-pointer-events: none;
-opacity: 0;
-}
-@keyframes particleAnimation {
-0% { transform: translate(0, 0); opacity: 1; }
-100% { transform: translate(var(--x), var(--y)); opacity: 0; }
-}
-.tab-content > div {
-display: none;
-}
-.tab-content > div.active {
-display: block;
-}
-.section {
-display: none;
-}
-.section.active {
-display: block;
-animation: fadeIn 0.8s forwards;
-}
-.home-content {
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-min-height: 80vh;
-}
-.logo-container {
-position: relative;
-width: 300px;
-height: 300px;
-transition: all 0.5s ease;
-}
-.logo-container img {
-width: 100%;
-height: 100%;
-object-fit: contain;
-border-radius: 20px;
-box-shadow: 0 0 40px rgba(255, 215, 0, 0.2);
-}
-.logo-container:hover {
-transform: scale(1.05);
-}
-.logo-container::after {
-content: "";
-position: absolute;
-top: -10px;
-left: -10px;
-right: -10px;
-bottom: -10px;
-border-radius: 30px;
-background: linear-gradient(45deg, rgba(255,215,0,0.2) 0%, rgba(255,165,0,0.1) 100%);
-z-index: -1;
-opacity: 0;
-transition: opacity 0.5s;
-}
-.logo-container:hover::after {
-opacity: 1;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WOIIZ | Cyber Terminal</title>
+  <meta name="description" content="Portfolio of WOIIZ, a gaming streamer and content creator from Malaysia. Explore my streams, projects, and more!">
+  <meta name="keywords" content="WOIIZ, Irfan Zafwan, streamer, gaming, Malaysia, content creator">
+  <meta property="og:title" content="WOIIZ | Cyber Terminal">
+  <meta property="og:description" content="Discover the world of WOIIZ, a passionate streamer and content creator from Malaysia.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/standard.gif">
+  <meta property="og:url" content="https://woiiz.xyz">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>W</text></svg>" type="image/svg+xml">
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neon: '#00FF00',
+            primary: '#FFD700',
+            secondary: '#FFA500'
+          },
+          borderRadius: {
+            'button': '8px'
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <style>
+    body {
+      background: #000;
+      color: #00FF00;
+      font-family: 'IBM Plex Mono', monospace;
+      overflow-x: hidden;
+      margin: 0;
+      position: relative;
+    }
 
-/* Welcome Text Animation */
-.welcome-text {
-font-family: 'Pacifico', cursive;
-background: linear-gradient(to right, #FFD700, #FFA500, #FFD700);
-background-size: 200% auto;
-color: transparent;
-background-clip: text;
--webkit-background-clip: text;
-text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-font-size: 3rem;
-margin-top: 2rem;
-position: relative;
-animation: shine 3s linear infinite;
-}
+    /* Loading Screen Styles (from index.html) */
+    .loading-terminal {
+      width: 90%;
+      max-width: 900px;
+      margin: 50px auto;
+      border-radius: 8px;
+      background-color: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(2px);
+      box-shadow: 0 0 25px rgba(0, 255, 0, 0.3);
+      overflow: hidden;
+      border: 1px solid #00ff00;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      transition: opacity 1s;
+    }
+    .loading-terminal.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .terminal-header {
+      background: #1a1a1a;
+      padding: 8px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .terminal-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .btn-close { background: #ff5f56; }
+    .btn-min { background: #ffbd2e; }
+    .btn-max { background: #27c93f; }
+    .terminal-body {
+      padding: 20px;
+      height: 70vh;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      font-size: 1rem;
+      background-image: radial-gradient(rgba(0,255,0,0.06) 1px, transparent 0);
+      background-size: 10px 10px;
+    }
+    .enter-link {
+      color: #33ff33;
+      text-decoration: underline;
+      cursor: pointer;
+      display: inline;
+      font-weight: bold;
+    }
+    .enter-link:hover {
+      text-shadow: 0 0 5px #33ff33;
+    }
 
-@keyframes shine {
-to {
-  background-position: 200% center;
-}
-}
-
-.welcome-text .letter {
-display: inline-block;
-transform-origin: center;
-}
-
-@keyframes bounce {
-0%, 100% {
-  transform: translateY(0);
-}
-50% {
-  transform: translateY(-20px);
-}
-}
-
-/* Partner Card Styles */
-.partner-card {
-position: relative;
-overflow: hidden;
-transition: all 0.3s;
-}
-.partner-card:hover {
-transform: translateY(-5px);
-}
-.partner-card::before {
-content: "";
-position: absolute;
-top: -50%;
-left: -50%;
-width: 200%;
-height: 200%;
-background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, rgba(0,0,0,0) 70%);
-opacity: 0;
-transition: opacity 0.5s;
-transform: rotate(30deg);
-}
-.partner-card:hover::before {
-opacity: 1;
-}
-.partner-image {
-position: relative;
-overflow: hidden;
-}
-.partner-image img {
-width: 100%;
-height: 100%;
-object-fit: cover;
-border-radius: 8px;
-border: 2px solid #FFD700;
-}
-.partner-image::after {
-content: "";
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-border-radius: 8px;
-box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.3);
-pointer-events: none;
-}
-
-/* Mobile Sidebar Styles */
-.sidebar {
-position: fixed;
-left: -80px;
-top: 0;
-height: 100%;
-width: 80px;
-background-color: rgba(0, 0, 0, 0.8);
-transition: left 0.3s ease;
-z-index: 1000;
-}
-.sidebar.active {
-left: 0;
-}
-.sidebar-toggle {
-position: fixed;
-top: 20px;
-left: 20px;
-z-index: 1001;
-background: rgba(255, 215, 0, 0.1);
-border: 1px solid rgba(255, 215, 0, 0.3);
-padding: 10px;
-border-radius: 8px;
-display: none;
-}
-.sidebar-toggle:hover {
-background: rgba(255, 215, 0, 0.2);
-}
-
-/* Mobile Responsive Styles */
-@media (max-width: 768px) {
-.sidebar {
-left: -80px;
-}
-.sidebar.active {
-left: 0;
-}
-.sidebar-toggle {
-display: block;
-}
-.main-content {
-margin-left: 0 !important;
-}
-.home-content {
-min-height: 100vh;
-padding: 20px;
-}
-.logo-container {
-width: 200px;
-height: 200px;
-}
-.welcome-text {
-font-size: 2.5rem;
-}
-#about, #partners {
-padding: 20px;
-}
-.profile-image {
-width: 120px;
-height: 120px;
-}
-.stat-card {
-flex-direction: column;
-text-align: center;
-}
-.stat-card .w-12 {
-margin-bottom: 1rem;
-}
-.tab-button {
-font-size: 14px;
-padding: 8px 12px;
-}
-.cursor-follower, .cursor-dot {
-display: none;
-}
-.tooltip {
-display: none;
-}
-.partner-image {
-width: 150px;
-height: 150px;
-}
-}
-
-/* Adjustments for smaller screens */
-@media (max-width: 640px) {
-h1.text-4xl {
-font-size: 2rem;
-}
-h2.text-3xl {
-font-size: 1.75rem;
-}
-h3.text-2xl {
-font-size: 1.5rem;
-}
-.profile-section .flex {
-flex-direction: column;
-text-align: center;
-}
-.tab-button {
-flex: 1;
-text-align: center;
-}
-.welcome-text {
-font-size: 2rem;
-}
-}
-</style>
+    /* Main Page Styles (from home.html) */
+    #terminal-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.1;
+    }
+    .cursor {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: #00FF00;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.2s;
+    }
+    .cursor::after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      width: 20px;
+      height: 20px;
+      border: 1px solid #00FF00;
+      opacity: 0.5;
+      animation: blink 0.5s infinite;
+    }
+    .cursor.hovered {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.5);
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 0; }
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      border-right: 1px solid #00FF00;
+      z-index: 1000;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .sidebar.hidden {
+      transform: translateX(-100%);
+    }
+    .nav-links a.active {
+      background: rgba(0, 255, 0, 0.2);
+    }
+    .nav-links a, .social-links a {
+      color: #00FF00;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      transition: background 0.3s, color 0.3s;
+    }
+    .nav-links a:hover, .social-links a:hover {
+      background: rgba(0, 255, 0, 0.2);
+      color: #FFD700;
+    }
+    .nav-links a i, .social-links a i {
+      font-size: 1rem;
+    }
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      color: #00FF00;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 1001;
+      transition: transform 0.3s;
+    }
+    .sidebar.active .hamburger {
+      left: auto;
+      right: 1rem;
+      transform: rotate(90deg);
+    }
+    .sidebar.active .hamburger i::before {
+      content: '\f00d'; /* fa-times */
+    }
+    .sound-toggle, .theme-toggle, .lang-toggle {
+      color: #00FF00;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    .sound-toggle:hover, .theme-toggle:hover, .lang-toggle:hover {
+      background: rgba(0, 255, 0, 0.2);
+      color: #FFD700;
+    }
+    .section {
+      min-height: 100vh;
+      padding: 2rem 2rem 2rem 220px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      opacity: 1;
+    }
+    .section.active {
+      display: flex;
+    }
+    .terminal-window {
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #00FF00;
+      border-radius: 8px;
+      padding: 1rem;
+      max-width: 800px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+    .terminal-window::before {
+      content: '[WOIIZ@Website_TERMINAL]~$';
+      position: absolute;
+      top: -1.5rem;
+      left: 1rem;
+      color: #00FF00;
+      font-size: 0.8rem;
+    }
+    .terminal-window::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(transparent, rgba(0, 255, 0, 0.05));
+      animation: scanline 3s infinite;
+      z-index: -1;
+    }
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    .welcome-text {
+      font-size: 2.5rem;
+      margin: 1rem 0;
+      text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+      position: relative;
+    }
+    .welcome-text::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #FFA500;
+    }
+    .subtitle-text {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+    }
+    .subtitle-text .static {
+      opacity: 1;
+    }
+    .subtitle-text .highlight {
+      color: #FFFFFF;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    .profile-image {
+      width: 120px;
+      height: 120px;
+      margin: 1rem auto;
+      position: relative;
+    }
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: 2px solid #00FF00;
+      border-radius: 8px;
+      filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.3));
+      loading: "lazy";
+    }
+    .profile-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(transparent, rgba(0, 255, 0, 0.2));
+      animation: scanline 3s infinite;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+      width: 100%;
+    }
+    .stat-card {
+      background: rgba(0, 255, 0, 0.1);
+      border: 1px solid #00FF00;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(0, 255, 0, 0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+    }
+    .stat-card:hover::after {
+      transform: translateX(100%);
+    }
+    .tab-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    .tab-button {
+      padding: 0.5rem 1rem;
+      background: rgba(0, 255, 0, 0.1);
+      border: 1px solid #00FF00;
+      color: #00FF00;
+      cursor: pointer;
+      transition: background 0.3s;
+      position: relative;
+    }
+    .tab-button.active, .tab-button:hover {
+      background: rgba(0, 255, 0, 0.3);
+      color: #FFD700;
+    }
+    .tab-button::before, .tab-button::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+    }
+    .tab-button:hover::before {
+      left: 1px;
+      text-shadow: -1px 0 #FF00FF;
+      animation: glitch 4s infinite;
+      opacity: 0.3;
+    }
+    .tab-button:hover::after {
+      left: -1px;
+      text-shadow: 1px 0 #00FFFF;
+      animation: glitch 5s infinite;
+      opacity: 0.2;
+    }
+    .tab-content > div {
+      display: none;
+    }
+    .tab-content > div.active {
+      display: block;
+    }
+    .timeline-item {
+      background: rgba(0, 255, 0, 0.05);
+      border-left: 2px solid #00FF00;
+      padding: 1rem;
+      margin: 1rem 0;
+      position: relative;
+    }
+    .timeline-item::before {
+      content: '>';
+      position: absolute;
+      top: 1rem;
+      left: -0.5rem;
+      color: #00FF00;
+      font-size: 1rem;
+    }
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      max-width: 800px;
+      width: 100%;
+    }
+    .partner-card {
+      background: rgba(0, 255, 0, 0.1);
+      border: 1px solid #00FF00;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+      transition: transform 0.3s;
+    }
+    .partner-card:hover {
+      transform: scale(1.05);
+    }
+    .partner-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border: 1px solid #00FF00;
+      margin-bottom: 0.5rem;
+      loading: "lazy";
+    }
+    .partner-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(transparent, rgba(0, 255, 0, 0.2));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .partner-card:hover::after {
+      opacity: 1;
+    }
+    .glitch {
+      position: relative;
+    }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      color: #00FF00;
+    }
+    .glitch::before {
+      left: 1px;
+      text-shadow: -1px 0 #FF00FF;
+      animation: glitch 4s infinite;
+      opacity: 0.3;
+    }
+    .glitch::after {
+      left: -1px;
+      text-shadow: 1px 0 #00FFFF;
+      animation: glitch 5s infinite;
+      opacity: 0.2;
+    }
+    @keyframes glitch {
+      0% { transform: translate(0); opacity: 0.3; }
+      20% { transform: translate(-1px, 1px); opacity: 0.2; }
+      40% { transform: translate(1px, -1px); opacity: 0.1; }
+      60% { transform: translate(-1px, 1px); opacity: 0.2; }
+      80% { transform: translate(1px, -1px); opacity: 0.1; }
+      100% { transform: translate(0); opacity: 0.3; }
+    }
+    .back-to-top {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      background: rgba(0, 255, 0, 0.2);
+      border: 1px solid #00FF00;
+      padding: 0.5rem;
+      cursor: pointer;
+      display: none;
+      z-index: 1000;
+    }
+    .back-to-top.show {
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 250px;
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      .hamburger {
+        display: block;
+      }
+      .section {
+        padding: 2rem 1rem;
+      }
+      .terminal-window {
+        padding: 1.5rem;
+      }
+      .welcome-text {
+        font-size: 1.8rem;
+      }
+      .subtitle-text {
+        font-size: 1rem;
+      }
+      .cursor {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="loading-screen">
-<div class="loader"></div>
-</div>
-<div class="cursor-follower"></div>
-<div class="cursor-dot"></div>
-<div class="min-h-screen flex">
-<!-- Sidebar Toggle Button -->
-<button class="sidebar-toggle">
-<i class="ri-menu-line text-xl text-primary"></i>
-</button>
-
-<!-- Left Sidebar -->
-<div class="sidebar flex flex-col items-center justify-between py-8 border-r border-opacity-10 border-gray-700">
-    <div class="flex flex-col items-center space-y-4">
-        <a href="#" class="sidebar-icon logo-icon w-12 h-12 overflow-hidden rounded-full">
-            <img src="standard.gif" alt="WOIIZ" class="w-full h-full object-cover">
-        </a>
-        <a href="#" class="sidebar-icon w-12 h-12 flex items-center justify-center bg-gray-900 bg-opacity-50 rounded-full hover:bg-opacity-70" data-section="home">
-            <i class="ri-home-5-line text-xl"></i>
-            <div class="tooltip">Home</div>
-        </a>
-        <a href="#" class="sidebar-icon w-12 h-12 flex items-center justify-center bg-gray-900 bg-opacity-50 rounded-full hover:bg-opacity-70" data-section="about">
-            <i class="ri-user-3-line text-xl"></i>
-            <div class="tooltip">About Me</div>
-        </a>
-        <a href="#" class="sidebar-icon w-12 h-12 flex items-center justify-center bg-gray-900 bg-opacity-50 rounded-full hover:bg-opacity-70" data-section="partners">
-            <i class="ri-group-line text-xl"></i>
-            <div class="tooltip">My Partners</div>
-        </a>
-        <a href="https://www.instagram.com/irfan.zfwn" target="_blank" class="sidebar-icon w-12 h-12 flex items-center justify-center bg-gray-900 bg-opacity-50 rounded-full hover:bg-opacity-70">
-            <i class="ri-instagram-line text-xl"></i>
-            <div class="tooltip">Follow me on Instagram</div>
-        </a> 
-        <a href="https://tiktok.com/@._woiiz" target="_blank" class="sidebar-icon w-12 h-12 flex items-center justify-center bg-gray-900 bg-opacity-50 rounded-full hover:bg-opacity-70">
-            <i class="ri-tiktok-line text-xl"></i>
-            <div class="tooltip">Follow my dance moves @WOIIZ</div>
-        </a>
-        <a href="https://discord.gg/snN8GHwnTr" target="_blank" class="sidebar-icon w-12 h-12 flex items-center justify-center bg-gray-900 bg-opacity-50 rounded-full hover:bg-opacity-70">
-            <i class="ri-discord-line text-xl"></i>
-            <div class="tooltip">Join our community server</div>
-        </a>
-        <a href="https://www.youtube.com/@WOIIZ" target="_blank" class="sidebar-icon w-12 h-12 flex items-center justify-center bg-gray-900 bg-opacity-50 rounded-full hover:bg-opacity-70">
-            <i class="ri-youtube-line text-xl"></i>
-            <div class="tooltip">Subscribe for daily content</div>
-        </a>
+  <!-- Loading Screen (from index.html) -->
+  <div class="loading-terminal" aria-live="polite">
+    <div class="terminal-header">
+      <span class="terminal-btn btn-close"></span>
+      <span class="terminal-btn btn-min"></span>
+      <span class="terminal-btn btn-max"></span>
     </div>
-    <div class="sidebar-icon w-12 h-12 flex items-center justify-center bg-gray-900 bg-opacity-50 rounded-full hover:bg-opacity-70">
-        <i class="ri-volume-up-line text-xl"></i>
-        <div class="tooltip">Toggle Sound</div>
+    <div id="terminal" class="terminal-body"></div>
+  </div>
+
+  <!-- Audio for Loading Screen -->
+  <audio id="typeSound" src="https://www.soundjay.com/mechanical/sounds/keyboard-1.mp3" preload="auto"></audio>
+
+  <!-- Custom Cursor -->
+  <div class="cursor"></div>
+
+  <!-- Terminal Background -->
+  <canvas id="terminal-bg"></canvas>
+
+  <!-- Sidebar Navigation -->
+  <div class="sidebar">
+    <div class="nav-links">
+      <a href="#home" data-section="home" aria-label="Go to Home"><i class="fas fa-home"></i> Home</a>
+      <a href="#about" data-section="about" aria-label="Go to About Me"><i class="fas fa-user"></i> About Me</a>
+      <a href="#partners" data-section="partners" aria-label="Go to My Partners"><i class="fas fa-users"></i> My Partners</a>
     </div>
-</div>
-
-<!-- Main Content -->
-<div class="main-content ml-20 w-full">
-    <!-- Home Section -->
-    <div id="home" class="section active page-content">
-        <div class="home-content">
-            <div class="logo-container">
-                <img src="standard.gif" alt="WOIIZ" class="animate-pulse">
-            </div>
-            <div class="welcome-text" id="welcome-text">Welcome Bro</div>
-        </div>
+    <div class="social-links mt-4">
+      <a href="https://www.instagram.com/irfan.zfwn" title="Follow me on Instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram @irfan.zfwn"><i class="fab fa-instagram"></i> Instagram</a>
+      <a href="https://tiktok.com/@._woiiz" title="Follow my dance moves @WOIIZ" target="_blank" rel="noopener noreferrer" aria-label="TikTok @._woiiz"><i class="fab fa-tiktok"></i> TikTok</a>
+      <a href="https://discord.gg/snN8GHwnTr" title="Join our community server" target="_blank" rel="noopener noreferrer" aria-label="Discord Community"><i class="fab fa-discord"></i> Discord</a>
+      <a href="https://www.youtube.com/@WOIIZ" title="Subscribe for daily content" target="_blank" rel="noopener noreferrer" aria-label="YouTube @WOIIZ"><i class="fab fa-youtube"></i> YouTube</a>
     </div>
-
-    <!-- About Me Section -->
-    <div id="about" class="section page-content max-w-6xl mx-auto px-8 py-12">
-        <!-- Header -->
-        <div class="mb-16 text-center">
-            <h1 class="text-4xl font-bold mb-2">About Me</h1>
-            <div class="flex justify-center items-center">
-                <div class="w-12 h-0.5 bg-primary"></div>
-                <div class="mx-3 text-primary">∞</div>
-                <div class="w-12 h-0.5 bg-primary"></div>
-            </div>
-        </div>
-        <!-- Profile Section -->
-        <div class="bg-gray-900 bg-opacity-40 rounded-xl p-8 backdrop-blur-sm mb-12 border border-gray-800 profile-section">
-            <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
-                <div class="profile-image w-48 h-48 flex-shrink-0">
-                    <div class="w-full h-full rounded-full overflow-hidden border-2 border-primary">
-                        <img src="standard.gif" alt="Logo" style="width: 100%; height: 100%;">
-                    </div>
-                </div>
-                <div class="flex-1">
-                    <h2 class="text-3xl font-bold mb-2">WOIIZ | Irfan Zafwan</h2>
-                    <div class="flex items-center mb-4">
-                        <i class="ri-map-pin-line mr-2 text-primary"></i>
-                        <span>Kelantan, MALAYSIA</span>
-                    </div>
-                    <p class="text-gray-300 mb-4">
-                        My name is Irfan, and I am in my late teens. I am currently a student, balancing my academic commitment with my passion for Gaming .
-                    </p>
-                    <p class="text-gray-300 mb-4">
-                        You can also find me on Instagram @irfan.zfwn | YouTube @WOIIZ | TikTok @._woiiz
-                    </p>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                <div class="stat-card bg-black bg-opacity-50 rounded-lg p-6 border border-gray-800 flex items-center">
-                    <div class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-4">
-                        <i class="ri-live-line text-xl text-primary"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold">3 Years Stream</h3>
-                        <p class="text-gray-400">Experience</p>
-                    </div>
-                </div>
-                <div class="stat-card bg-black bg-opacity-50 rounded-lg p-6 border border-gray-800 flex items-center">
-                    <div class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-4">
-                        <i class="ri-folder-5-line text-xl text-primary"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold">5+ Projects</h3>
-                        <p class="text-gray-400">Completed</p>
-                    </div>
-                </div>
-                <div class="stat-card bg-black bg-opacity-50 rounded-lg p-6 border border-gray-800 flex items-center">
-                    <div class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-4">
-                        <i class="ri-user-star-line text-xl text-primary"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold">AMBITION</h3>
-                        <p class="text-gray-400">Health & Safety Officer</p>
-                    </div>
-                </div>
-            </div>
-            <div class="flex justify-center mt-8">
-                <a href="#" class="download-btn !rounded-button bg-primary bg-opacity-10 hover:bg-opacity-20 text-primary px-6 py-3 flex items-center font-medium transition-all whitespace-nowrap">
-                    <i class="ri-download-2-line mr-2"></i>
-                    Download CV
-                </a>
-            </div>
-        </div>
-        <!-- Tabs Section -->
-        <div class="mb-12">
-            <div class="flex border-b border-gray-800 mb-8">
-                <button class="tab-button active px-6 py-3 font-medium text-primary" data-tab="resume">Resume</button>
-                <button class="tab-button px-6 py-3 font-medium text-gray-400 hover:text-white" data-tab="portfolio">Portfolio</button>
-                <button class="tab-button px-6 py-3 font-medium text-gray-400 hover:text-white" data-tab="contact">Contact</button>
-            </div>
-            <div class="tab-content">
-                <!-- Resume Tab -->
-                <div class="tab-pane active" id="resume">
-                    <div class="space-y-12">
-                        <!-- Education Section -->
-                        <div>
-                            <h3 class="text-2xl font-bold mb-6 flex items-center">
-                                <i class="ri-book-open-line mr-3 text-primary"></i>
-                                Education
-                            </h3>
-                            <div class="space-y-8">
-                                <div class="bg-gray-900 bg-opacity-40 rounded-lg p-6 border border-gray-800 relative overflow-hidden">
-                                    <div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
-                                    <div class="ml-2">
-                                        <div class="flex justify-between items-start mb-2">
-                                            <h4 class="text-xl font-bold">SKM LEVEL 3 IN MECHANICAL PLANT DOWNSTREAM</h4>  
-                                            <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full text-sm">2025-2027</span>
-                                        </div>
-                                        <p class="text-gray-400 mb-2">ADTEC PASIR GUDANG</p>
-                                        <p class="text-gray-300">
-                                            Specialized in Pipeline Maintenance in Downstream sector of OIL, GAS & PETROCHEMICAL
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Experience Section -->
-                        <div>
-                            <h3 class="text-2xl font-bold mb-6 flex items-center">
-                                <i class="ri-briefcase-4-line mr-3 text-primary"></i>
-                                Experience
-                            </h3>
-                            <div class="space-y-8">
-                                <div class="bg-gray-900 bg-opacity-40 rounded-lg p-6 border border-gray-800 relative overflow-hidden">
-                                    <div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
-                                    <div class="ml-2">
-                                        <div class="flex justify-between items-start mb-2">
-                                            <h4 class="text-xl font-bold">Content Creator (Casual/Free-Time Gaming Streamer)</h4>
-                                            <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full text-sm">2021-Present</span>
-                                        </div>
-                                        <p class="text-gray-400 mb-2">TikTok Live Studio</p>
-                                        <p class="text-gray-300">
-                                            In my free time, I engage in gaming streaming, creating content for my audience by sharing gameplay, interacting with viewers, and showcasing various games.
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="bg-gray-900 bg-opacity-40 rounded-lg p-6 border border-gray-800 relative overflow-hidden">
-                                    <div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
-                                    <div class="ml-2">
-                                        <div class="flex justify-between items-start mb-2">
-                                            <h4 class="text-xl font-bold">-</h4>
-                                            <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full text-sm">Present</span>
-                                        </div>
-                                        <p class="text-gray-400 mb-2">-</p>
-                                        <p class="text-gray-300">-</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Portfolio Tab -->
-                <div class="tab-pane" id="portfolio">
-                    <div class="text-center p-12">
-                        <i class="ri-gallery-line text-5xl text-primary mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-2">Portfolio Coming Soon</h3>
-                        <p class="text-gray-400">I'm currently working on updating my portfolio with my latest projects!</p>
-                    </div>
-                </div>
-                <!-- Contact Tab -->
-                <div class="tab-pane" id="contact">
-                    <div class="text-center p-12">
-                        <i class="ri-mail-line text-5xl text-primary mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-2">Get In Touch</h3>
-                        <p class="text-gray-400 mb-6">Feel free to contact me for any inquiries or collaboration opportunities.</p>
-                        <div class="flex justify-center space-x-4 mb-8">
-                            <a href="https://www.instagram.com/irfan.zfwn" class="bg-primary bg-opacity-10 hover:bg-opacity-20 text-primary p-3 rounded-full">
-                                <i class="ri-instagram-line text-xl"></i>
-                            </a>
-                            <a href="https://tiktok.com/@._woiiz" class="bg-primary bg-opacity-10 hover:bg-opacity-20 text-primary p-3 rounded-full">
-                                <i class="ri-tiktok-line text-xl"></i>
-                            </a>
-                            <a href="https://discord.gg/snN8GHwnTr" class="bg-primary bg-opacity-10 hover:bg-opacity-20 text-primary p-3 rounded-full">
-                                <i class="ri-discord-line text-xl"></i>
-                            </a>
-                            <a href="https://www.youtube.com/@WOIIZ" class="bg-primary bg-opacity-10 hover:bg-opacity-20 text-primary p-3 rounded-full">
-                                <i class="ri-youtube-line text-xl"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="sound-toggle mt-4" data-sound="on">
+      <i class="fas fa-volume-up"></i> Toggle Sound
     </div>
+    <div class="theme-toggle mt-2" data-theme="dark">
+      <i class="fas fa-adjust"></i> Toggle Theme
+    </div>
+    <div class="lang-toggle mt-2" data-lang="en">
+      <i class="fas fa-language"></i> Toggle Language
+    </div>
+  </div>
+  <div class="hamburger" aria-label="Toggle navigation menu" tabindex="0" role="button" aria-expanded="false"><i class="fas fa-bars"></i></div>
 
-    <!-- My Partners Section -->
-    <div id="partners" class="section page-content max-w-6xl mx-auto px-8 py-12">
-        <!-- Header -->
-        <div class="mb-16 text-center">
- 
-            <h1 class="text-4xl font-bold mb-2">My Partners</h1>
-            <div class="flex justify-center items-center">
-                <div class="w-12 h-0.5 bg-primary"></div>
-                <div class="mx-3 text-primary">∞</div>
-                <div class="w-12 h-0.5 bg-primary"></div>
-            </div>
+  <!-- Home Section -->
+  <section id="home" class="section">
+    <div class="terminal-window">
+      <h1 class="welcome-text glitch" data-text="Hi Everyone">Hi Everyone</h1>
+      <div class="subtitle-text" id="subtitle-text">
+        <span class="static">I am</span> <span class="highlight" id="dynamic-role">Streamer</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="section">
+    <div class="terminal-window">
+      <h2 class="text-2xl font-bold mb-4 glitch" data-text="About Me">About Me</h2>
+      <div class="profile-image">
+        <img src="https://raw.githubusercontent.com/woiiz/woiiz.xyz/refs/heads/main/standard.gif" alt="Irfan Zafwan" loading="lazy">
+      </div>
+      <h3 class="text-xl font-bold mb-2 glitch" data-text="WOIIZ | Irfan Zafwan" style="text-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 30px #00FF00;">WOIIZ | Irfan Zafwan</h3>
+      <p class="mb-2"><i class="fas fa-map-pin mr-2"></i>Kelantan, MALAYSIA</p>
+      <p class="mb-4">
+        My name is Irfan, and I am in my late teens. I am currently a student, balancing my academic commitment with my passion for Gaming & Content Creation.
+      </p>
+      <p class="mb-4">
+        You can also find me on Instagram @irfan.zfwn | YouTube @WOIIZ | TikTok @._woiiz
+      </p>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <h4 class="font-bold">3 Years Stream</h4>
+          <p>Experience</p>
         </div>
-        <!-- Partners Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Partner 1 -->
-            <a href="https://youtube.com/@tuchannel1?si=B6YO_dEpMci4zS_H" target="_blank" class="partner-card bg-gray-900 bg-opacity-40 rounded-lg p-6 border border-gray-800 flex flex-col items-center">
-                <div class="partner-image w-48 h-48 mb-4">
-                    <img src="https://yt3.googleusercontent.com/Ol04I_dysY68PMtzfaI_X896pv0ZB_xRugqfqkgv8ysLp-43MJq33IOde58U__QnqCIZ0_EK=s160-c-k-c0x00ffffff-no-rj" alt="Tu Channel">
-                </div>
-                <h3 class="text-xl font-bold text-primary">TuChannel</h3>
-            </a>
-            <!-- Partner 2 -->
-            <a href="https://youtube.com/@jenuhdramaproduction8030?si=a1HReFPuXiNdmybJ" target="_blank" class="partner-card bg-gray-900 bg-opacity-40 rounded-lg p-6 border border-gray-800 flex flex-col items-center">
-                <div class="partner-image w-48 h-48 mb-4">
-                    <img src="https://yt3.googleusercontent.com/qNi1oD1knFOGNBOfZSy92LEqBDorsQq2-qIwm19LwlB2SoFs-hOAAWa2xZKQPawUA5iz5kdFKA=s160-c-k-c0x00ffffff-no-rj" alt="Jdp">
-                </div>
-                <h3 class="text-xl font-bold text-primary">Jenuh Drama Production</h3>
-            </a>
-            <!-- Partner 3 -->
-           
-</div>
+        <div class="stat-card">
+          <h4 class="font-bold">5+ Projects</h4>
+          <p>Completed</p>
+        </div>
+        <div class="stat-card">
+          <h4 class="font-bold">AMBITION</h4>
+          <p>Health & Safety Officer</p>
+        </div>
+      </div>
+      <a href="#" class="bg-neon text-black px-4 py-2 rounded-button hover:bg-primary mt-4 inline-block tab-button glitch" data-text="Download CV" onclick="alert('CV will be available soon!'); return false;">
+        <i class="fas fa-download mr-2"></i>Download CV
+      </a>
+      <div class="tab-buttons">
+        <button class="tab-button active" data-tab="resume" data-text="Resume">Resume</button>
+        <button class="tab-button" data-tab="portfolio" data-text="Portfolio">Portfolio</button>
+        <button class="tab-button" data-tab="contact" data-text="Contact">Contact</button>
+      </div>
+      <div class="tab-content">
+        <div class="tab-pane active" id="resume">
+          <h3 class="text-lg font-bold mb-2"><i class="fas fa-book mr-2"></i>Education</h3>
+          <div class="timeline-item">
+            <h4 class="font-bold">SKM LEVEL 3 IN MECHANICAL PLANT DOWNSTREAM</h4>
+            <p class="mb-2">2025-2027 | ADTEC PASIR GUDANG</p>
+            <p>Specialized in Pipeline Maintenance in Downstream sector of OIL, GAS & PETROCHEMICAL</p>
+          </div>
+          <h3 class="text-lg font-bold mb-2"><i class="fas fa-briefcase mr-2"></i>Experience</h3>
+          <div class="timeline-item">
+            <h4 class="font-bold">Content Creator (Casual/Free-Time Gaming Streamer)</h4>
+            <p class="mb-2">2021-Present | TikTok Live Studio</p>
+            <p>In my free time, I engage in gaming streaming, creating content for my audience by sharing gameplay, interacting with viewers, and showcasing various games.</p>
+          </div>
+          <div class="timeline-item">
+            <h4 class="font-bold">-</h4>
+            <p class="mb-2">Present | -</p>
+            <p>-</p>
+          </div>
+        </div>
+        <div class="tab-pane" id="portfolio">
+          <h3 class="text-lg font-bold mb-2"><i class="fas fa-folder mr-2"></i>Portfolio Coming Soon</h3>
+          <p>I'm currently working on updating my portfolio with my latest projects!</p>
+        </div>
+        <div class="tab-pane" id="contact">
+          <h3 class="text-lg font-bold mb-2"><i class="fas fa-envelope mr-2"></i>Get In Touch</h3>
+          <p class="mb-4">Feel free to contact me for any inquiries or collaboration opportunities.</p>
+          <div class="flex justify-center gap-4">
+            <a href="https://www.instagram.com/irfan.zfwn" class="text-neon hover:text-primary" target="_blank" rel="noopener noreferrer" aria-label="Instagram @irfan.zfwn"><i class="fab fa-instagram"></i></a>
+            <a href="https://tiktok.com/@._woiiz" class="text-neon hover:text-primary" target="_blank" rel="noopener noreferrer" aria-label="TikTok @._woiiz"><i class="fab fa-tiktok"></i></a>
+            <a href="https://discord.gg/snN8GHwnTr" class="text-neon hover:text-primary" target="_blank" rel="noopener noreferrer" aria-label="Discord Community"><i class="fab fa-discord"></i></a>
+            <a href="https://www.youtube.com/@WOIIZ" class="text-neon hover:text-primary" target="_blank" rel="noopener noreferrer" aria-label="YouTube @WOIIZ"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
-<script>
-// Loading Screen
-window.addEventListener('load', function() {
-    setTimeout(function() {
-        document.querySelector('.loading-screen').classList.add('hidden');
-        document.body.classList.add('loaded');
-        
-        // Show home section by default
-        showSection('home');
-        
-        // Animate elements
-        const elements = document.querySelectorAll('.page-content > div');
-        elements.forEach((el, index) => {
-            setTimeout(() => {
-                el.style.opacity = '1';
-                el.style.transform = 'translateY(0)';
-            }, 200 * index);
-        });
-    }, 1500);
-});
+  <!-- Partners Section -->
+  <section id="partners" class="section">
+    <div class="terminal-window">
+      <h2 class="text-2xl font-bold mb-4 glitch" data-text="My Partners">My Partners</h2>
+      <div class="partners-grid">
+        <a href="https://youtube.com/@tuchannel1?si=N6Cvn3u83an7L9wo" class="partner-card" target="_blank" rel="noopener noreferrer" onclick="if(!confirm('You are leaving this website. Continue?')) return false;">
+          <img src="https://yt3.googleusercontent.com/Ol04I_dysY68PMtzfaI_X896pv0ZB_xRugqfqkgv8ysLp-43MJq33IOde58U__QnqCIZ0_EK=s160-c-k-c0x00ffffff-no-rj" alt="TuChannel" loading="lazy">
+          <h3 class="font-bold">TuChannel</h3>
+        </a>
+        <a href="https://youtube.com/@jenuhdramaproduction8030?si=vuEfv_Qlv71f5raA" class="partner-card" target="_blank" rel="noopener noreferrer" onclick="if(!confirm('You are leaving this website. Continue?')) return false;">
+          <img src="https://yt3.googleusercontent.com/qNi1oD1knFOGNBOfZSy92LEqBDorsQq2-qIwm19LwlB2SoFs-hOAAWa2xZKQPawUA5iz5kdFKA=s160-c-k-c0x00ffffff-no-rj" alt="Jenuh Drama Production" loading="lazy">
+          <h3 class="font-bold">Jenuh Drama Production</h3>
+        </a>
+      </div>
+    </div>
+  </section>
 
-// Section Navigation
-function showSection(sectionId) {
-    // Hide all sections
-    document.querySelectorAll('.section').forEach(section => {
-        section.classList.remove('active');
-    });
-    
-    // Show the selected section
-    document.getElementById(sectionId).classList.add('active');
-    
-    // Hide sidebar on mobile after navigation
-    if (window.innerWidth <= 768) {
-        document.querySelector('.sidebar').classList.remove('active');
-    }
-}
+  <div class="back-to-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });"><i class="fas fa-caret-up"></i></div>
 
-// Sidebar Toggle
-const sidebarToggle = document.querySelector('.sidebar-toggle');
-const sidebar = document.querySelector('.sidebar');
-sidebarToggle.addEventListener('click', function() {
-    sidebar.classList.toggle('active');
-});
-
-// Navigation listeners
-document.querySelectorAll('[data-section]').forEach(link => {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const sectionId = this.getAttribute('data-section');
-        showSection(sectionId);
-    });
-});
-
-// Custom Cursor
-const cursorFollower = document.querySelector('.cursor-follower');
-const cursorDot = document.querySelector('.cursor-dot');
-document.addEventListener('mousemove', function(e) {
-    cursorFollower.style.left = e.clientX + 'px';
-    cursorFollower.style.top = e.clientY + 'px';
-    cursorDot.style.left = e.clientX + 'px';
-    cursorDot.style.top = e.clientY + 'px';
-});
-
-// Magnetic Buttons
-const magneticButtons = document.querySelectorAll('.sidebar-icon');
-magneticButtons.forEach(button => {
-    button.addEventListener('mousemove', function(e) {
-        const rect = this.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        this.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px) scale(1.1)`;
-        // Create particles
-        createParticles(e, this);
-    });
-    
-    button.addEventListener('mouseleave', function() {
-        this.style.transform = '';
-    });
-    
-    button.addEventListener('mousedown', function() {
-        this.style.transform = 'scale(0.95)';
-    });
-    
-    button.addEventListener('mouseup', function() {
-        this.style.transform = 'scale(1.1)';
-    });
-});
-
-// Particle effect
-function createParticles(e, parent) {
-    const rect = parent.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    for (let i = 0; i < 3; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        const size = Math.random() * 5 + 2;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${x}px`;
-        particle.style.top = `${y}px`;
-        
-        const destinationX = (Math.random() - 0.5) * 50;
-        const destinationY = (Math.random() - 0.5) * 50;
-        particle.style.setProperty('--x', `${destinationX}px`);
-        particle.style.setProperty('--y', `${destinationY}px`);
-        particle.style.animation = `particleAnimation ${Math.random() * 1 + 0.5}s forwards`;
-        
-        parent.appendChild(particle);
-        
-        setTimeout(() => {
-            particle.remove();
-        }, 1500);
-    }
-}
-
-// Tab Switching
-const tabButtons = document.querySelectorAll('.tab-button');
-tabButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        // Remove active class from all buttons and panes
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-        
-        // Add active class to current button
-        this.classList.add('active');
-        
-        // Show the corresponding tab content
-        const tabId = this.getAttribute('data-tab');
-        document.getElementById(tabId).classList.add('active');
-    });
-});
-
-// Set the first tab as active by default
-document.querySelector('.tab-button').click();
-
-// Make the logo clickable to go home
-document.querySelector('.logo-icon').addEventListener('click', function(e) {
-    e.preventDefault();
-    showSection('home');
-});
-
-// Close sidebar when clicking outside on mobile
-document.addEventListener('click', function(e) {
-    if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
-        sidebar.classList.remove('active');
-    }
-});
-
-// Responsive adjustments
-window.addEventListener('resize', function() {
-    if (window.innerWidth > 768) {
-        sidebar.classList.remove('active');
-    }
-});
-</script>
-<script>
-// Enhanced Welcome Text Animation
-document.addEventListener('DOMContentLoaded', function() {
-    // Get the existing welcome text element
-    const welcomeTextElement = document.getElementById('welcome-text');
-    
-    // Create a container to hold both main text and subtitle
-    const welcomeContainer = document.createElement('div');
-    welcomeContainer.className = 'flex flex-col items-center';
-    
-    // Create subtitle element
-    const subtitleTextElement = document.createElement('div');
-    subtitleTextElement.id = 'subtitle-text';
-    subtitleTextElement.className = 'subtitle-text';
-    subtitleTextElement.innerHTML = '<span>I</span> <span>am</span> <span>a</span> <span class="highlight">Streamer</span>';
-    
-    // Add enhanced CSS for better typography and animations
-    const styleElement = document.createElement('style');
-    styleElement.textContent = `
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Dancing+Script:wght@700&display=swap');
-        
-        #welcome-text {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            background: linear-gradient(to right, #FFD700, #FFA500, #FFD700);
-            background-size: 200% auto;
-            color: transparent;
-            background-clip: text;
-            -webkit-background-clip: text;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-            font-size: 3.5rem;
-            letter-spacing: 2px;
-            position: relative;
-            animation: shine 3s linear infinite;
-            margin-bottom: 0.5rem;
-        }
-        
-        .subtitle-text {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.8rem;
-            margin-top: 0.5rem;
-            opacity: 0.9;
-            color: #fff;
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
-        }
-        
-        .subtitle-text span {
-            display: inline-block;
-            transform: translateY(0);
-            transition: transform 0.3s ease;
-        }
-        
-        .subtitle-text:hover span {
-            transform: translateY(-5px);
-            transition-delay: calc(0.05s * var(--i));
-        }
-        
-        .subtitle-text .highlight {
-            background: linear-gradient(to right, #FFD700, #FFA500);
-            background-size: 200% auto;
-            color: transparent;
-            background-clip: text;
-            -webkit-background-clip: text;
-            font-weight: bold;
-            animation: shine 3s linear infinite;
-        }
-        
-        @keyframes shine {
-            to {
-                background-position: 200% center;
-            }
-        }
-        
-        @keyframes fadeSlideIn {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes scaleIn {
-            0% { opacity: 0; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-        
-        @keyframes letterSpacing {
-            0% { letter-spacing: -5px; opacity: 0; }
-            50% { letter-spacing: 10px; opacity: 0.5; }
-            100% { letter-spacing: 2px; opacity: 1; }
-        }
-    `;
-    document.head.appendChild(styleElement);
-    
-    // Replace welcome text with container
-    welcomeTextElement.parentNode.insertBefore(welcomeContainer, welcomeTextElement);
-    welcomeContainer.appendChild(welcomeTextElement);
-    welcomeContainer.appendChild(subtitleTextElement);
-    
-    // Animation variables
-    const mainTexts = ['Woiiz'];
-    const subtitleTexts = [
-        '<span style="--i:1">I</span> <span style="--i:2">am</span> <span style="--i:3">a</span> <span class="highlight" style="--i:4">Streamer</span>',
-        '<span style="--i:1">I</span> <span style="--i:2">am</span> <span style="--i:3">a</span> <span class="highlight" style="--i:4">Gamer</span>',
-        '<span style="--i:1">I</span> <span style="--i:2">am</span> <span style="--i:3">a</span> <span class="highlight" style="--i:4">Game Developer</span>'
+  <script>
+    // Loading Screen (from index.html)
+    const terminal = document.getElementById("terminal");
+    const typeSound = document.getElementById("typeSound");
+    const loadingTerminal = document.querySelector(".loading-terminal");
+    const lines = [
+      "[ INITIATING CONNECTION TO REMOTE SERVER... ]",
+      "> Target domain: woiiz.xyz",
+      "> Resolving DNS... SUCCESS",
+      "> Establishing secure channel... OK",
+      "> Launching penetration sequence...",
+      "",
+      "> Running vulnerability scan...",
+      "[+] Open ports found: 22, 80, 443",
+      "[+] Web server identified: Apache/2.4.41 (Ubuntu)",
+      "[+] CMS detected: Custom - Obfuscated Scripts Detected",
+      "",
+      "> Bypassing WAF... SUCCESS",
+      "> Injecting remote shell... ESTABLISHED",
+      "> Accessing /var/www/woiiz/secure_root...",
+      "> Decrypting system keys... 98%... 100%",
+      "> Access level elevated: ROOT ACCESS GRANTED",
+      "",
+      "███ SYSTEM BREACH CONFIRMED ███",
+      "> Terminal override in progress...",
+      "> Injecting masked payload...",
+      "> Altering page flow...",
+      "> Loading Woiiz Interface...",
+      "",
+      ">> Press ENTER to access secured network."
     ];
-    
-    let mainTextIndex = 0;
-    let subtitleTextIndex = 0;
-    
-    // Set initial text
-    welcomeTextElement.textContent = mainTexts[0];
-    subtitleTextElement.innerHTML = subtitleTexts[0];
-    
-    // Apply initial animations
-    welcomeTextElement.style.animation = 'letterSpacing 1.5s ease forwards, shine 3s linear infinite';
-    subtitleTextElement.style.animation = 'fadeSlideIn 1.5s ease forwards';
-    
-    // Update subtitle text every 2.5 seconds
-    setInterval(() => {
-        subtitleTextElement.style.opacity = '0';
-        subtitleTextElement.style.transform = 'translateY(10px)';
-        subtitleTextElement.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        
-        setTimeout(() => {
-            subtitleTextIndex = (subtitleTextIndex + 1) % subtitleTexts.length;
-            subtitleTextElement.innerHTML = subtitleTexts[subtitleTextIndex];
-            subtitleTextElement.style.opacity = '1';
-            subtitleTextElement.style.transform = 'translateY(0)';
-        }, 500);
-    }, 2500);
-    
-    // Update main text every 7.5 seconds (after 3 subtitle rotations)
-    setInterval(() => {
-        welcomeTextElement.style.opacity = '0';
-        welcomeTextElement.style.transform = 'scale(0.9)';
-        welcomeTextElement.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        
-        setTimeout(() => {
-            mainTextIndex = (mainTextIndex + 1) % mainTexts.length;
-            welcomeTextElement.textContent = mainTexts[mainTextIndex];
-            welcomeTextElement.style.opacity = '1';
-            welcomeTextElement.style.transform = 'scale(1)';
-            welcomeTextElement.style.animation = 'scaleIn 0.8s forwards, shine 3s linear infinite';
-        }, 500);
-    }, 7500);
-});
-</script>
+    let line = 0;
+    let char = 0;
+
+    function typeLine() {
+      if (line >= lines.length) {
+        const enterSpan = document.createElement("span");
+        enterSpan.innerHTML = `>> <span class="enter-link" tabindex="0" role="link">Press ENTER to access secured network.</span>`;
+        terminal.appendChild(enterSpan);
+        const cursor = document.createElement("span");
+        cursor.className = "cursor";
+        cursor.textContent = "_";
+        terminal.appendChild(cursor);
+        terminal.scrollTop = terminal.scrollHeight;
+
+        const enterLink = enterSpan.querySelector(".enter-link");
+        enterLink.addEventListener("click", () => {
+          loadingTerminal.classList.add("hidden");
+          showSection("home");
+        });
+        enterLink.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            loadingTerminal.classList.add("hidden");
+            showSection("home");
+          }
+        });
+        return;
+      }
+      if (char < lines[line].length) {
+        terminal.innerHTML += lines[line].charAt(char);
+        typeSound.currentTime = 0;
+        typeSound.play().catch(() => {});
+        char++;
+        terminal.scrollTop = terminal.scrollHeight;
+        setTimeout(typeLine, 20);
+      } else {
+        terminal.innerHTML += "\n";
+        line++;
+        char = 0;
+        setTimeout(typeLine, 100);
+      }
+    }
+    typeLine();
+
+    // Custom Cursor
+    const cursor = document.querySelector(".cursor");
+    document.addEventListener("mousemove", (e) => {
+      cursor.style.left = e.clientX + "px";
+      cursor.style.top = e.clientY + "px";
+    });
+    document.querySelectorAll("a, button, .partner-card").forEach((el) => {
+      el.addEventListener("mouseenter", () => cursor.classList.add("hovered"));
+      el.addEventListener("mouseleave", () => cursor.classList.remove("hovered"));
+    });
+
+    // Terminal Background with Enhanced Animation
+    const canvas = document.getElementById("terminal-bg");
+    const ctx = canvas.getContext("2d");
+    let linesAnim = [];
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      linesAnim = Array.from({ length: 20 }, () => ({
+        x: Math.random() * canvas.width,
+        y: 0,
+        speed: Math.random() * 2 + 1,
+        text: Array.from({ length: 10 }, () => Math.random().toString(36)[2]).join(""),
+        offset: Math.random() * 10 - 5
+      }));
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+    function drawLines() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#00FF00";
+      ctx.font = "12px IBM Plex Mono";
+      linesAnim.forEach((line) => {
+        ctx.fillText(line.text, line.x + Math.sin(Date.now() * 0.001 + line.offset) * 5, line.y);
+        line.y += line.speed;
+        if (line.y > canvas.height) line.y = 0;
+      });
+      requestAnimationFrame(drawLines);
+    }
+    drawLines();
+
+    // Navigation
+    function showSection(sectionId) {
+      const loadingText = document.createElement("div");
+      loadingText.className = "loader-text";
+      loadingText.textContent = "[LOADING...";
+      const activeTerminal = document.querySelector(".section.active .terminal-window") || document.querySelector(".terminal-window");
+      activeTerminal.appendChild(loadingText);
+      new Typed(loadingText, {
+        strings: ["[LOADING...]", "[LOADING...] DONE"],
+        typeSpeed: 50,
+        showCursor: true,
+        cursorChar: "_",
+        onComplete: () => {
+          activeTerminal.removeChild(loadingText);
+          document.querySelectorAll(".section").forEach((section) => {
+            section.classList.remove("active");
+            section.style.display = "none";
+          });
+          const target = document.getElementById(sectionId);
+          target.classList.add("active");
+          target.style.display = "flex";
+          if (window.innerWidth <= 768) {
+            document.querySelector(".sidebar").classList.remove("active");
+          }
+          gsap.fromTo(
+            target.querySelector(".terminal-window"),
+            { opacity: 0, y: 20 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.5,
+              ease: "power2.out",
+              onComplete: () => {
+                target.querySelectorAll(".partner-card, .tab-pane").forEach((el) => {
+                  el.style.opacity = "1";
+                });
+                document.querySelectorAll(".nav-links a").forEach((link) => link.classList.remove("active"));
+                document.querySelector(`[data-section="${sectionId}"]`).classList.add("active");
+              }
+            }
+          );
+        }
+      });
+    }
+    document.querySelectorAll("[data-section]").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        showSection(link.getAttribute("data-section"));
+        playClickSound();
+      });
+    });
+    document.querySelector(".hamburger").addEventListener("click", () => {
+      const sidebar = document.querySelector(".sidebar");
+      sidebar.classList.toggle("active");
+      document.querySelector(".hamburger").setAttribute("aria-expanded", sidebar.classList.contains("active"));
+      playClickSound();
+    });
+    document.querySelector(".hamburger").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        const sidebar = document.querySelector(".sidebar");
+        sidebar.classList.toggle("active");
+        document.querySelector(".hamburger").setAttribute("aria-expanded", sidebar.classList.contains("active"));
+        playClickSound();
+      }
+    });
+
+    // Welcome Text with Time-Based Greeting
+    const welcomeText = document.querySelector(".welcome-text");
+    function getGreeting() {
+      const hour = new Date().getHours();
+      if (hour < 12) return "Good Morning Everyone";
+      if (hour < 18) return "Good Afternoon Everyone";
+      return "Good Evening Everyone";
+    }
+    new Typed(".welcome-text", {
+      strings: [getGreeting()],
+      typeSpeed: 50,
+      showCursor: true,
+      cursorChar: "_",
+      onComplete: () => {
+        const dynamicRole = document.getElementById("dynamic-role");
+        const roles = ["Streamer", "Gamer", "Game Developer"];
+        let roleIndex = 0;
+        function updateRole() {
+          gsap.to(dynamicRole, {
+            opacity: 0,
+            duration: 0.3,
+            onComplete: () => {
+              roleIndex = (roleIndex + 1) % roles.length;
+              dynamicRole.textContent = roles[roleIndex];
+              gsap.to(dynamicRole, { opacity: 1, duration: 0.3 });
+            }
+          });
+        }
+        setInterval(updateRole, 3000);
+        setTimeout(updateRole, 3000);
+      }
+    });
+
+    // Tab Switching with Typing Effect
+    document.querySelectorAll(".tab-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".tab-button").forEach((btn) => btn.classList.remove("active"));
+        document.querySelectorAll(".tab-pane").forEach((pane) => pane.classList.remove("active"));
+        button.classList.add("active");
+        const pane = document.getElementById(button.getAttribute("data-tab"));
+        pane.classList.add("active");
+        new Typed(pane.querySelector("h3"), {
+          strings: [pane.querySelector("h3").textContent],
+          typeSpeed: 30,
+          showCursor: false
+        });
+        gsap.from(pane, { opacity: 0, y: 10, duration: 0.3 });
+        playClickSound();
+      });
+    });
+
+    // Scroll Animations and Back to Top
+    window.addEventListener("scroll", () => {
+      const backToTop = document.querySelector(".back-to-top");
+      if (window.scrollY > 300) backToTop.classList.add("show");
+      else backToTop.classList.remove("show");
+    });
+
+    // Icon Pulse Animation
+    document.querySelectorAll(".nav-links a i, .social-links a i").forEach((icon) => {
+      icon.addEventListener("mouseenter", () => {
+        gsap.to(icon, {
+          boxShadow: "0 0 10px #00FF00",
+          duration: 0.5,
+          repeat: -1,
+          yoyo: true
+        });
+      });
+      icon.addEventListener("mouseleave", () => {
+        gsap.to(icon, { boxShadow: "none", duration: 0.5 });
+      });
+    });
+
+    // Theme Toggle
+    const themeToggle = document.querySelector(".theme-toggle");
+    themeToggle.addEventListener("click", () => {
+      const body = document.body;
+      const isDark = themeToggle.getAttribute("data-theme") === "dark";
+      if (isDark) {
+        body.style.background = "#FFF";
+        body.style.color = "#000";
+        document.querySelectorAll(".terminal-window").forEach((el) => (el.style.background = "rgba(255, 255, 255, 0.8)"));
+        document.querySelectorAll("a, button").forEach((el) => (el.style.color = "#000"));
+        document.querySelectorAll(".terminal-window").forEach((el) => (el.style.borderColor = "#000"));
+        document.querySelectorAll(".terminal-window").forEach((el) => (el.style.boxShadow = "0 0 20px rgba(0, 0, 0, 0.3)"));
+        themeToggle.setAttribute("data-theme", "light");
+      } else {
+        body.style.background = "#000";
+        body.style.color = "#00FF00";
+        document.querySelectorAll(".terminal-window").forEach((el) => (el.style.background = "rgba(0, 0, 0, 0.8)"));
+        document.querySelectorAll("a, button").forEach((el) => (el.style.color = "#00FF00"));
+        document.querySelectorAll(".terminal-window").forEach((el) => (el.style.borderColor = "#00FF00"));
+        document.querySelectorAll(".terminal-window").forEach((el) => (el.style.boxShadow = "0 0 20px rgba(0, 255, 0, 0.3)"));
+        themeToggle.setAttribute("data-theme", "dark");
+      }
+      playClickSound();
+    });
+
+    // Language Toggle
+    const langToggle = document.querySelector(".lang-toggle");
+    let isEnglish = true;
+    const translations = {
+      en: {
+        about: "About Me",
+        resume: "Resume",
+        portfolio: "Portfolio",
+        contact: "Contact",
+        education: "Education",
+        experience: "Experience",
+        getInTouch: "Get In Touch"
+      },
+      ms: {
+        about: "Tentang Saya",
+        resume: "Biodata",
+        portfolio: "Portfolio",
+        contact: "Hubungi",
+        education: "Pendidikan",
+        experience: "Pengalaman",
+        getInTouch: "Berhubung"
+      }
+    };
+    langToggle.addEventListener("click", () => {
+      isEnglish = !isEnglish;
+      const lang = isEnglish ? "en" : "ms";
+      langToggle.setAttribute("data-lang", lang);
+      document.querySelector('[data-text="About Me"]').textContent = translations[lang].about;
+      document.querySelector('[data-tab="resume"]').textContent = translations[lang].resume;
+      document.querySelector('[data-tab="portfolio"]').textContent = translations[lang].portfolio;
+      document.querySelector('[data-tab="contact"]').textContent = translations[lang].contact;
+      document.querySelector("#resume h3").textContent = `${translations[lang].education}`;
+      document.querySelector("#resume h3:nth-child(3)").textContent = `${translations[lang].experience}`;
+      document.querySelector("#contact h3").textContent = `${translations[lang].getInTouch}`;
+      playClickSound();
+    });
+
+    // Sound Toggle
+    const soundToggle = document.querySelector(".sound-toggle");
+    let isSoundOn = true;
+    const clickSound = new Audio("https://www.soundjay.com/buttons/beep-01a.mp3");
+    function playClickSound() {
+      if (isSoundOn) clickSound.play().catch(() => {});
+    }
+    soundToggle.addEventListener("click", () => {
+      isSoundOn = !isSoundOn;
+      soundToggle.setAttribute("data-sound", isSoundOn ? "on" : "off");
+      soundToggle.querySelector("i").className = isSoundOn ? "fas fa-volume-up" : "fas fa-volume-mute";
+      playClickSound();
+    });
+
+    // Tooltip for Social Links
+    document.querySelectorAll(".social-links a").forEach((link) => {
+      link.addEventListener("mouseenter", () => {
+        const tooltip = document.createElement("span");
+        tooltip.className = "tooltip";
+        tooltip.textContent = link.getAttribute("aria-label");
+        tooltip.style.cssText = "position: absolute; background: rgba(0, 0, 0, 0.8); color: #00FF00; padding: 0.2rem 0.5rem; border: 1px solid #00FF00; z-index: 1000;";
+        link.appendChild(tooltip);
+        const rect = link.getBoundingClientRect();
+        tooltip.style.top = `${rect.bottom + 5}px`;
+        tooltip.style.left = `${rect.left}px`;
+      });
+      link.addEventListener("mouseleave", () => {
+        link.querySelector(".tooltip")?.remove();
+      });
+    });
+
+    // Lazy Loading for Images and Cards
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll("img, .partner-card").forEach((el) => {
+      el.style.opacity = "0";
+      observer.observe(el);
+    });
+
+    // Google Analytics (Replace 'G-XXXXXX' with your ID)
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-XXXXXX");
+  </script>
 </body>
 </html>
